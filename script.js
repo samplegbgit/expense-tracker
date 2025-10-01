@@ -1,12 +1,7 @@
-const expenseForm = document.getElementById('expense-form');
-const expenseList = document.getElementById('expense-list');
-const balanceEl = document.getElementById('balance');
+let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
 
-let expenses = [];
-
-function updateBalance() {
-  const total = expenses.reduce((sum, expense) => sum + expense.amount, 0);
-  balanceEl.textContent = `₹${total}`;
+function saveToLocalStorage() {
+  localStorage.setItem('expenses', JSON.stringify(expenses));
 }
 
 function renderExpenses() {
@@ -21,6 +16,7 @@ function renderExpenses() {
     expenseList.appendChild(li);
   });
   updateBalance();
+  saveToLocalStorage();
 }
 
 function deleteExpense(index) {
@@ -30,7 +26,6 @@ function deleteExpense(index) {
 
 expenseForm.addEventListener('submit', (e) => {
   e.preventDefault();
-
   const name = document.getElementById('expense-name').value.trim();
   const amount = parseFloat(document.getElementById('expense-amount').value);
 
@@ -42,3 +37,6 @@ expenseForm.addEventListener('submit', (e) => {
     alert('Please enter valid details');
   }
 });
+
+// Load existing expenses on page load
+renderExpenses();
